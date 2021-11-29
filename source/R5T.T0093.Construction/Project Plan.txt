@@ -1,0 +1,3 @@
+R5T.T0093.Construction - Construction project for IFilePathed and related interface type definitions..
+
+GOALS:
