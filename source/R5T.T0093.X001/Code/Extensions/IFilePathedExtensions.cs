@@ -26,19 +26,32 @@ namespace System.Linq
             return output;
         }
 
-        public static Dictionary<string, T> ToDictionaryByFilePath<T>(this IEnumerable<T> items)
+        public static IEnumerable<string> GetFilePaths<T>(this IEnumerable<T> filePatheds)
             where T : IFilePathed
         {
-            var output = items.ToDictionary(x => x.FilePath);
+            var output = filePatheds.Select(Instances.Selector.SelectFilePath<T>());
             return output;
         }
 
-        public static Dictionary<string, T> ToDictionaryByFilePathModified<T>(this IEnumerable<T> items,
+        public static Dictionary<string, T> ToDictionaryByFilePath<T>(this IEnumerable<T> filePatheds)
+            where T : IFilePathed
+        {
+            var output = filePatheds.ToDictionary(Instances.Selector.SelectFilePath<T>());
+            return output;
+        }
+
+        public static Dictionary<string, T> ToDictionaryByFilePathModified<T>(this IEnumerable<T> filePatheds,
             Func<string, string> filePathModifier)
             where T : IFilePathed
         {
-            var output = items.ToDictionary(x => filePathModifier(x.FilePath));
+            var output = filePatheds.ToDictionary(x => filePathModifier(x.FilePath));
             return output;
+        }
+
+        public static void VerifyDistinctByFilePath<T>(this IEnumerable<T> filePatheds)
+            where T : IFilePathed
+        {
+            filePatheds.GetFilePaths().VerifyDistinct();
         }
     }
 }
